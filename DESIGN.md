@@ -1,5 +1,5 @@
-Zenar Commands
-==============
+Zenar Transactions
+==================
 
 Il plugin nasce con lo scopo di gestire eventuali transazioni tra conto virtuale
 dell'utente e zenar fisici (intesi come items stackabili presenti in gioco.) Le
