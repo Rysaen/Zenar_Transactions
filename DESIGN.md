@@ -41,8 +41,12 @@ diventerebbe ampiamente personalizzabile attraverso un file di configurazioni.
 ## Comandi
 
 ```
-/zenar [-w|--withdraw] [-D|--denomination taglio] <quantity>
-/zenar [-d|--deposit]
+/zenar withdraw [-d|--denomination taglio] <quantity>
+/zenar deposit
+
+# Se non ci sono conflitti
+/ritira (rimanda a /zenar withdraw)
+/deposita (rimanda a /zenar deposit)
 ```
 
 ### Operazione di prelievo
@@ -54,9 +58,10 @@ prelevare e, in questo caso, l'algoritmo interno deciderà autonomamente
 quali tagli assegnare e la relativa quantità.
 
 Per avere maggiore controllo sui tagli emessi, è possibile utilizzare l'opzione
-_denomination_ e specificare il taglio (attraverso l'identificativo o il valore
-dello stesso.) In tal caso, la quantità specificata non indicherà il valore
-totale degli zenar emesse, ma il numero stesso degli zenar di quel taglio.
+_denomination_ (mediante flag -d o --denomination) e specificare il taglio
+(attraverso l'identificativo o il valore dello stesso.) In tal caso, la quantità
+specificata non indicherà il valore totale degli zenar emesse, ma il numero
+stesso degli zenar di quel taglio.
 
 Una lista degli identificativi potrebbe essere la seguente: lapis, gold,
 diamond, emerald, ruby, platinum.
@@ -71,13 +76,17 @@ Esempi
 # - 3 Lapis Zenar
 # Totale: 123 Zenar
 
-> /zenar -w 123
+> /zenar withdraw 123
+# Oppure
+> /ritira 123
 
 # Preleva 20 Diamond Zenar dal conto. Al termine dell'operazione:
 # - 20 Diamond Zenar
 # Totale: 1280 Zenar
 
-> /zenar --withdraw -D diamond 20
+> /zenar withdraw -d diamond 20
+# Oppure
+> /ritira -d diamond 20
 
 # (*) Distribuiti secondo un algoritmo interno casuale.
 ```
@@ -96,7 +105,9 @@ Esempio
 # All'interno dell'inventario del player sono presenti 5 Diamond Zenar e 2 Gold
 # Zenar, per un totale di 336 Zenar. Sul conto virtuale sono presenti 200 Zenar.
 
-> /zenar -d
+> /zenar deposit
+# Oppure
+> /deposita
 
 # Al termine dell'operazione, tutti gli zenar contenuti nell'inventario del
 # player saranno rimossi. Il conto virtuale ammonterà 536 Zenar.
