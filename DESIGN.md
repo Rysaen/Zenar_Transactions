@@ -38,6 +38,73 @@ Si valuta la possibilità di rendere tagli e relativi riferimenti _softcoded_.
 In contrapposizione alla filosofia _hardcoded_, questa tabella di riferimento
 diventerebbe ampiamente personalizzabile attraverso un file di configurazioni.
 
+In tal caso, parte del file di configurazioni viene dedicata alla descrizione
+dei tagli, e ogni entry ha un formato simile a questo:
+
+```json
+{
+    "name": "Denomination Name",
+    "value": 1,
+    "itemId": "minecraft:item_id"
+}
+```
+
+Se vogliamo tradurre la tabella dei tagli in quello che poi viene riportato su
+un file di configurazioni, il risultato definitivo sarà molto simile al
+seguente: (Nell'esempio si utilizza il formato JSON)
+
+```json
+{
+    "denominations": [
+        {
+            "name": "Lapis Zenar",
+            "value": 1,
+            "itemId": "variedcommodities:coin_iron"
+        },
+        {
+            "name": "Gold Zenar",
+            "value": 8,
+            "itemId": "variedcommodities:coin_gold"
+        },
+        {
+            "name": "Diamond Zenar",
+            "value": 64,
+            "itemId": "variedcommodities:coin_diamond"
+        },
+        {
+            "name": "Emerald Zenar",
+            "value": 512,
+            "itemId": "variedcommodities:coin_emerald"
+        },
+        {
+            "name": "Ruby Zenar",
+            "value": 4096,
+            "itemId": "variedcommodities:coin_bronze"
+        },
+        {
+            "name": "Platinum Zenar",
+            "value": 32768,
+            "itemId": "variedcommodities:coin_stone"
+        }
+    ]
+}
+```
+
+L'inserimento di un nuovo taglio, o la rimozione di uno già esistente, così come
+la modifica del valore di un taglio, o dell'oggetto associato si risolve dunque
+nella manipolazione delle entry di questo file, senza agire direttamente sul
+codice (ribadisco che le "vesti" del file di configurazioni potrebbero variare
+a seconda del formato che verrà definitivamente utilizzato, JSON in questo caso
+specifico.)
+
+### Vincolo sulle entry
+
+Non si impone un limite al numero di tagli presenti, ma si chiede che sia
+necessariamente presente il taglio associato al valore 1. In caso di mancato
+inserimento, il plugin lancerà un'eccezione. Questo vincolo sussiste perché in
+caso di mancanza del valore unitario, alcuni valori potrebbero non essere
+traducibili dal conto virtuale a quello fisico senza dovuti arrotondamenti.
+
 ## Comandi
 
 ```
@@ -126,7 +193,6 @@ L'operazione di prelievo fallisce e l'utente ne viene notificato.
 </dd>
 </dl>
 
-
 ### Operazione di deposito
 
 Nel rispetto dei vincoli specificati nella sezione successiva, il comando di
@@ -142,7 +208,9 @@ Esempio
 # Zenar, per un totale di 336 Zenar. Sul conto virtuale sono presenti 200 Zenar.
 
 > /zenar deposit
+
 # Oppure
+
 > /deposita
 
 # Al termine dell'operazione, tutti gli zenar contenuti nell'inventario del
