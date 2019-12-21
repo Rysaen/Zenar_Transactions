@@ -45,8 +45,9 @@ diventerebbe ampiamente personalizzabile attraverso un file di configurazioni.
 /zenar deposit
 
 # Se non ci sono conflitti
-/ritira (rimanda a /zenar withdraw)
-/deposita (rimanda a /zenar deposit)
+
+/ritira     (rimanda a /zenar withdraw)
+/deposita   (rimanda a /zenar deposit)
 ```
 
 ### Operazione di prelievo
@@ -77,7 +78,9 @@ Esempi
 # Totale: 123 Zenar
 
 > /zenar withdraw 123
+
 # Oppure
+
 > /ritira 123
 
 # Preleva 20 Diamond Zenar dal conto. Al termine dell'operazione:
@@ -85,11 +88,44 @@ Esempi
 # Totale: 1280 Zenar
 
 > /zenar withdraw -d diamond 20
+
 # Oppure
+
 > /ritira -d diamond 20
 
 # (*) Distribuiti secondo un algoritmo interno casuale.
 ```
+#### Casi speciali
+
+Le operazioni di prelievo possono essere soggette a condizioni speciali, che ne
+determinano l'esito. La gestione di tali casistiche viene effettuata dal plugin
+nelle modalità che seguono:
+
+<dl><dt>
+L'utente prova a prelevare una somma di zenar superiore a quella posseduta
+</dt><dd>
+Il plugin prova a trasferire il tetto massimo di zenar trasferibili dal conto
+virtuale. In caso di successo, l'utente viene notificato con la quota esatta di
+zenar trasferiti dal proprio conto. (Non con quella richiesta)
+</dd><dt>
+L'utente prova a prelevare una certa somma di zenar, ma non ha spazio nell'
+inventario a sufficienza per immagazzinarli
+</dt><dd>
+L'operazione di prelievo fallisce e l'utente ne viene notificato.
+</dd><dt>
+L'utente prova a prelevare una certa somma, ma l'inventario contiene già degli
+zenar
+</dt><dd>
+Nell'implementazione, l'algoritmo interno dev'essere abbastanza intelligente da
+gestire il merge nella maniera ottimale, e solo nel caso di reale conflitto,
+rimandare al caso precedente.
+</dd><dt>
+L'utente prova a prelevare una somma negativa
+</dt><dd>
+L'operazione di prelievo fallisce e l'utente ne viene notificato.
+</dd>
+</dl>
+
 
 ### Operazione di deposito
 
@@ -110,7 +146,7 @@ Esempio
 > /deposita
 
 # Al termine dell'operazione, tutti gli zenar contenuti nell'inventario del
-# player saranno rimossi. Il conto virtuale ammonterà 536 Zenar.
+# player saranno rimossi. Il conto virtuale ammonterà a 536 Zenar.
 ```
 
 ### Timeout
