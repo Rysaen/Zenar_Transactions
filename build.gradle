@@ -9,7 +9,7 @@ plugins {
 compileJava.options.encoding = "UTF-8"
 
 group = 'io.github.rysaen'
-version = '1.0.0-SNAPSHOT'
+version = '19.12'
 description = 'Zenar Transactions Plugin'
 
 repositories {

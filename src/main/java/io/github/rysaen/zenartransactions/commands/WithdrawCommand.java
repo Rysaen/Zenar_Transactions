@@ -9,6 +9,8 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.text.format.TextStyles;
 
 import io.github.rysaen.zenartransactions.denominations.Denominations;
 import io.github.rysaen.zenartransactions.util.TransactionUtil;
@@ -17,6 +19,14 @@ import io.github.rysaen.zenartransactions.util.TransactionUtil;
 public class WithdrawCommand implements CommandExecutor  {
 	
 	private static CommandSpec spec;
+	
+	private static final Text commandDescriptionL = Text.builder()
+			.append(Text.of("Ti permette di prelevare zenar fisici dal tuo conto virtuale. Se è specificato solo il valore da ritirare, ti verrà automaticamente assegnato il quantitativo di zenar corrispondente. In caso tu voglia ritirare uno specifico taglio, puoi utilizzare l'opzione  "))
+			.append(Text.of(TextColors.GOLD, "-d"))
+			.append(Text.of(" (o esteso "))
+			.append(Text.of(TextColors.GOLD, "--denomination"))
+			.append(Text.of(") specificando il nome del taglio (tra quelli disponibili) e il numero degli zenar di quel taglio da ritirare."))
+			.build();
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
@@ -39,7 +49,8 @@ public class WithdrawCommand implements CommandExecutor  {
 	public static CommandSpec build() {
 		if(spec == null) {
 			spec = CommandSpec.builder()
-				.description(Text.of("Withdraw")) // TODO Withdraw Description
+				.description(Text.of("Ritira zenar fisici dal conto virtuale."))
+				.extendedDescription(commandDescriptionL)
 				.executor(new WithdrawCommand())
 				.arguments(GenericArguments.flags()
 					.valueFlag(GenericArguments.onlyOne(GenericArguments.choices(Text.of("taglio"), () -> { return Denominations.getDefinitions(); }, (x) -> { return x; }, true)), "d", "-denomination")

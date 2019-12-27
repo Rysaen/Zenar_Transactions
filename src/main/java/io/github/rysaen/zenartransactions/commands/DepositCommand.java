@@ -12,6 +12,7 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.text.format.TextStyles;
 
 import io.github.rysaen.zenartransactions.util.TransactionUtil;
 
@@ -19,6 +20,16 @@ import io.github.rysaen.zenartransactions.util.TransactionUtil;
 public class DepositCommand implements CommandExecutor {
 
 	private static CommandSpec spec;
+	
+	private static final Text commandDescriptionL = Text.builder()
+			.append(Text.of("Ti permette di depositare gli zenar che hai nell'inventario sul conto virtuale. Utiizzando l'opzione "))
+			.append(Text.of(TextColors.GOLD, "-p"))
+			.append(Text.of(" (o nel formato esteso "))
+			.append(Text.of(TextColors.GOLD, "--peek"))
+			.append(Text.of(") è possibile ottenere la stima degli zenar trasportati "))
+			.append(Text.of(TextStyles.ITALIC, "senza"))
+			.append(Text.of(" effettuare l'operazione di deposito."))
+			.build();
 	
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
@@ -44,7 +55,8 @@ public class DepositCommand implements CommandExecutor {
 	public static CommandSpec build() {
 		if(spec == null) {
 			spec = CommandSpec.builder()
-				.description(Text.of("Deposit")) // TODO Deposit command description
+				.description(Text.of("Deposita gli zenar che stai trasportando sul conto virtuale."))
+				.extendedDescription(commandDescriptionL)
 				.executor(new DepositCommand())
 				.arguments(GenericArguments.flags()
 					.flag("p", "-peek")

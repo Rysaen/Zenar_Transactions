@@ -40,7 +40,7 @@ public class ZenarPlugin {
 	public final static String ID = "zenartransactions";
 	public final static String NAME = "Zenar Transactions";
 	public final static String DESCRIPTION = "Zenar Transactions Plugin";
-	public final static String VERSION = "1.0.0";
+	public final static String VERSION = "19.12";
 	public final static String SPONGE_API_VERSION = "7.1.0";
 		
 	@Inject PluginContainer plugin;

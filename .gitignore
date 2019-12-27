@@ -13,6 +13,8 @@ bin/
 
 # Emacs generated
 *~
+.#*
+*#
 
 # Tests
 src/test/

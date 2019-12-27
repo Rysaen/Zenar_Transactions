@@ -10,7 +10,7 @@ public class ZenarCommand {
 	public static CommandSpec build() {
 		if(spec == null) {
 			spec = CommandSpec.builder()
-				.description(Text.of("Zenar")) // TODO Zenar command description
+				.description(Text.of("Mette a disposizione una serie di sotto-comandi specifici per le transazioni tra zenar fisici e conto virtuale."))
 				.child(WithdrawCommand.build(), "withdraw")
 				.child(DepositCommand.build(), "deposit")
 				.build()
