@@ -34,68 +34,31 @@ multiplo di 8:
 | 4096          | Ruby Zenar         | variedcommodities:coin_bronze  |
 | 32768         | Platinum Zenar     | variedcommodities:coin_stone   |
 
-Si valuta la possibilità di rendere tagli e relativi riferimenti _softcoded_.
-In contrapposizione alla filosofia _hardcoded_, questa tabella di riferimento
-diventerebbe ampiamente personalizzabile attraverso un file di configurazioni.
+Tagli e relativi riferimenti sono _softcoded_ e dunque personalizzabili mediante
+il file di configurazioni associato al plugin (config/zenar.conf).
 
-In tal caso, parte del file di configurazioni viene dedicata alla descrizione
-dei tagli, e ogni entry ha un formato simile a questo:
 
-```json
+```
 {
-    "name": "Denomination Name",
-    "value": 1,
-    "itemId": "minecraft:item_id"
+    name="DENOMINATION",
+    value=VALUE,
+    itemid="PLUGINID:ITEMID"
 }
 ```
 
-Se vogliamo tradurre la tabella dei tagli in quello che poi viene riportato su
-un file di configurazioni, il risultato definitivo sarà molto simile al
-seguente: (Nell'esempio si utilizza il formato JSON)
+Ogni entry è caratterizzata dalle seguenti proprietà:
 
-```json
-{
-    "denominations": [
-        {
-            "name": "Lapis Zenar",
-            "value": 1,
-            "itemId": "variedcommodities:coin_iron"
-        },
-        {
-            "name": "Gold Zenar",
-            "value": 8,
-            "itemId": "variedcommodities:coin_gold"
-        },
-        {
-            "name": "Diamond Zenar",
-            "value": 64,
-            "itemId": "variedcommodities:coin_diamond"
-        },
-        {
-            "name": "Emerald Zenar",
-            "value": 512,
-            "itemId": "variedcommodities:coin_emerald"
-        },
-        {
-            "name": "Ruby Zenar",
-            "value": 4096,
-            "itemId": "variedcommodities:coin_bronze"
-        },
-        {
-            "name": "Platinum Zenar",
-            "value": 32768,
-            "itemId": "variedcommodities:coin_stone"
-        }
-    ]
-}
-```
+* `name`, indica il nome del taglio. È l'identificatore utilizzato nel comando
+  `/zenar withdraw --denomination <taglio> <valore>`;
+* `value`, il valore effettivo del taglio;
+* `itemid`, l'ID dell'item associato al taglio. Non esistono vincoli sugli ID
+  possibili da utilizzare. Per convenzione si utilizza il formato
+  "pluginid:itemid".
 
 L'inserimento di un nuovo taglio, o la rimozione di uno già esistente, così come
-la modifica del valore di un taglio, o dell'oggetto associato si risolve dunque
-nella manipolazione delle entry di questo file, senza agire direttamente sul
-codice (ribadisco che le "vesti" del file di configurazioni potrebbero variare
-a seconda del formato che verrà definitivamente utilizzato, JSON in questo caso
-specifico.)
+la modifica del valore di un taglio, o dell'oggetto associato si riduce alla
+manipolazione delle entry di questo file. Il formato utilizzato è
+[HOCON](https://github.com/lightbend/config/blob/master/HOCON.md).
 
 ### Vincolo sulle entry
 
@@ -109,7 +72,7 @@ traducibili dal conto virtuale a quello fisico senza dovuti arrotondamenti.
 
 ```
 /zenar withdraw [-d|--denomination taglio] <quantity>
-/zenar deposit
+/zenar deposit [-p|--peek]
 
 # Se non ci sono conflitti
 
@@ -125,11 +88,11 @@ Perché l'operazione vada a buon fine, dev'essere specificata una quantità da
 prelevare e, in questo caso, l'algoritmo interno deciderà autonomamente
 quali tagli assegnare e la relativa quantità.
 
-Per avere maggiore controllo sui tagli emessi, è possibile utilizzare l'opzione
-_denomination_ (mediante flag -d o --denomination) e specificare il taglio
-(attraverso l'identificativo o il valore dello stesso.) In tal caso, la quantità
-specificata non indicherà il valore totale degli zenar emesse, ma il numero
-stesso degli zenar di quel taglio.
+Per avere maggiore controllo sui tagli emessi, è possibile utilizzare il flag
+`-(-d)enomination` e specificare il taglio (attraverso l'identificativo o il
+valore dello stesso.) In tal caso, la quantità specificata non indicherà il
+valore totale degli zenar emesse, ma il numero stesso degli zenar di quel
+taglio.
 
 Una lista degli identificativi potrebbe essere la seguente: lapis, gold,
 diamond, emerald, ruby, platinum.
@@ -199,7 +162,9 @@ Nel rispetto dei vincoli specificati nella sezione successiva, il comando di
 deposito permette all'utente di depositare tutti gli zenar, presenti all'interno
 del proprio inventario, sul proprio conto virtuale.
 
-Al contrario dell'operazione precedente, il comando non accetta parametri.
+Il flag `-(-p)eek` restituisce il valore effettivo degli zenar che verrebbero
+depositati, senza però effettuare l'operazione di deposito. In altre parole
+restituisce la stima economica di tutti gli zenar contenuti nell'inventario.
 
 Esempio
 
@@ -214,15 +179,19 @@ Esempio
 > /deposita
 
 # Al termine dell'operazione, tutti gli zenar contenuti nell'inventario del
-# player saranno rimossi. Il conto virtuale ammonterà a 536 Zenar.
+# player saranno rimossi. Il conto virtuale ammonterà a 536 Zenar. Nel
+# caso in cui fosse stato utilizzato il comando:
+
+> /zenar deposit -p
+
+# Oppure
+
+> /deposita --peek
+
+# Al termine dell'operazione il player verrebbe notificato della somma
+# complessiva che possiede nell'inventario, ma non verranno trasferiti
+# sul conto virtuale.
 ```
-
-### Timeout
-
-Dal momento che le operazioni di prelievo/deposito potrebbero rappresentare un'
-incognita sulla prestazioni, ci si riserva la possibilità di implementare una
-finestra temporale (timeout) all'interno della quale non è possibile utilizzare
-i comandi di prelievo/deposito.
 
 ## Vincoli
 
