@@ -25,16 +25,16 @@ import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 
 @Plugin(
-		id = ZenarPlugin.ID, 
-		name = ZenarPlugin.NAME, 
+		id = ZenarPlugin.ID,
+		name = ZenarPlugin.NAME,
 		description = ZenarPlugin.DESCRIPTION,
 		version = ZenarPlugin.VERSION,
 		authors = {"Rysaen"},
 		dependencies = @Dependency(
-				id = "spongeapi", 
+				id = "spongeapi",
 				version = ZenarPlugin.SPONGE_API_VERSION
+				)
 		)
-)
 public class ZenarPlugin {
 	// Plugin meta-info
 	public final static String ID = "zenartransactions";
@@ -42,31 +42,11 @@ public class ZenarPlugin {
 	public final static String DESCRIPTION = "Zenar Transactions Plugin";
 	public final static String VERSION = "19.12";
 	public final static String SPONGE_API_VERSION = "7.1.0";
-		
+
 	@Inject PluginContainer plugin;
 	@Inject @ConfigDir(sharedRoot = true)
 	Path configPath;
-	
-	@Listener
-	public void onPreInit(GamePreInitializationEvent evt) {
-		ZenarLogger.get().info("Pre-Initialization phase started.");
-		// Loading configurations
-		ConfigurationNode root = this.loadConfigurations();
-		// Loading denominations
-		this.loadDenominations(root);
-		ZenarLogger.get().info("Pre-Initialization phase ended.");
-	}
-	
-	@Listener
-	public void onInit(GameInitializationEvent evt) {
-		ZenarLogger.get().info("Initialization phase started.");
-		// Commands Registration
-		Sponge.getCommandManager().register(this, DepositCommand.build(), "deposita");
-		Sponge.getCommandManager().register(this, WithdrawCommand.build(), "ritira");
-		Sponge.getCommandManager().register(this, ZenarCommand.build(), "zenar");
-		ZenarLogger.get().info("Initialization phase ended.");
-	}
-	
+
 	private ConfigurationNode loadConfigurations() {
 		ZenarLogger.get().info("Loading configurations ...");
 		// Configuration file is created if not present
@@ -88,7 +68,7 @@ public class ZenarPlugin {
 		}
 		return root;
 	}
-	
+
 	private void loadDenominations(ConfigurationNode node) {
 		ZenarLogger.get().info("Loading denominations ...");
 		node.getNode("main", "denominations").getChildrenList().forEach(x -> {
@@ -97,5 +77,25 @@ public class ZenarPlugin {
 		});
 		ZenarLogger.get().info("Successfully loaded {} denominations.", Denominations.count());
 		return;
+	}
+
+	@Listener
+	public void onInit(GameInitializationEvent evt) {
+		ZenarLogger.get().info("Initialization phase started.");
+		// Commands Registration
+		Sponge.getCommandManager().register(this, DepositCommand.build(), "deposita");
+		Sponge.getCommandManager().register(this, WithdrawCommand.build(), "ritira");
+		Sponge.getCommandManager().register(this, ZenarCommand.build(), "zenar");
+		ZenarLogger.get().info("Initialization phase ended.");
+	}
+
+	@Listener
+	public void onPreInit(GamePreInitializationEvent evt) {
+		ZenarLogger.get().info("Pre-Initialization phase started.");
+		// Loading configurations
+		ConfigurationNode root = loadConfigurations();
+		// Loading denominations
+		loadDenominations(root);
+		ZenarLogger.get().info("Pre-Initialization phase ended.");
 	}
 }

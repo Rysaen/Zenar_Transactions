@@ -20,7 +20,7 @@ import io.github.rysaen.zenartransactions.util.TransactionUtil;
 public class DepositCommand implements CommandExecutor {
 
 	private static CommandSpec spec;
-	
+
 	private static final Text commandDescriptionL = Text.builder()
 			.append(Text.of("Ti permette di depositare gli zenar che hai nell'inventario sul conto virtuale. Utiizzando l'opzione "))
 			.append(Text.of(TextColors.GOLD, "-p"))
@@ -30,7 +30,22 @@ public class DepositCommand implements CommandExecutor {
 			.append(Text.of(TextStyles.ITALIC, "senza"))
 			.append(Text.of(" effettuare l'operazione di deposito."))
 			.build();
-	
+
+	public static CommandSpec build() {
+		if(spec == null)
+			spec = CommandSpec.builder()
+			.description(Text.of("Deposita gli zenar che stai trasportando sul conto virtuale."))
+			.extendedDescription(commandDescriptionL)
+			.executor(new DepositCommand())
+			.arguments(GenericArguments.flags()
+					.flag("p", "-peek")
+					.buildWith(GenericArguments.none())
+					)
+			.build()
+			;
+		return spec;
+	}
+
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if(src instanceof Player) {
@@ -42,30 +57,12 @@ public class DepositCommand implements CommandExecutor {
 						.append(Text.of(TextColors.GOLD, amount))
 						.append(Text.of(" zenar."))
 						.build()
-				);
+						);
 				return CommandResult.success();
-			} else {
-				if(TransactionUtil.deposit(player))
-					CommandResult.success();
-			}
+			} else if(TransactionUtil.deposit(player))
+				CommandResult.success();
 		}
 		return CommandResult.empty();
-	}
-
-	public static CommandSpec build() {
-		if(spec == null) {
-			spec = CommandSpec.builder()
-				.description(Text.of("Deposita gli zenar che stai trasportando sul conto virtuale."))
-				.extendedDescription(commandDescriptionL)
-				.executor(new DepositCommand())
-				.arguments(GenericArguments.flags()
-					.flag("p", "-peek")
-					.buildWith(GenericArguments.none())
-				)
-				.build()
-			;
-		}
-		return spec;
 	}
 
 }

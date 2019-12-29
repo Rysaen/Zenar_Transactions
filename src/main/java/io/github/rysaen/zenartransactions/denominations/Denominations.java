@@ -13,17 +13,23 @@ import org.spongepowered.api.item.inventory.query.QueryOperation;
 import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
 
 public final class Denominations {
-	
-	private static List<Denomination> table = new ArrayList<Denomination>();
+
+	private static List<Denomination> table = new ArrayList<>();
 	private static QueryOperation<?>[] queries = null;
 	private static Collection<String> definitions = null;
 	private static Map<Integer,Denomination> map = null;
-	
+
 	private static boolean _qoutdateflag = false;
 	private static boolean _defoutdateflag = false;
 	private static boolean _mapoutdateflag = false;
-	
-	private Denominations() {}
+
+	/**
+	 * Returns the number of denominations currently registered.
+	 * @return the number of denominations present.
+	 */
+	public static int count() {
+		return table.size();
+	}
 
 	/**
 	 * Returns the definition associated with each denomination. Used internally
@@ -33,49 +39,27 @@ public final class Denominations {
 	public static Collection<String> getDefinitions() {
 		if(_defoutdateflag) {
 			definitions = table.stream()
-				.map(x -> { return x.getName(); })
-				.collect(Collectors.toList())
-			;
+					.map(x -> { return x.getName(); })
+					.collect(Collectors.toList())
+					;
 			_defoutdateflag = false;
 		}
 		return definitions;
 	}
-	
+
 	/**
-	 * Returns a map containing the id associated with a denomination in the
-	 * internal table, and the denomination itself.
-	 * @return a {@link Map} of ids and denominations.
+	 * Returns the {@link Denomination} associated with the given Item ID.
+	 * @param itemid of the denomination.
+	 * @return the associated {@link Denomination} on success, null otherwise.
 	 */
-	public static Map<Integer,Denomination> getDenominations() {
-		if(_mapoutdateflag) {
-			map = IntStream.range(0, table.size())
-				.boxed()
-				.collect(Collectors.toMap(i -> i, table::get))
-			;
-			_mapoutdateflag = false;
-		}
-		return map;
+	public static Denomination getDenominationByItemId(String itemid) {
+		int i;
+		for(i = 0; i < table.size(); ++i)
+			if(table.get(i).getItemId().equals(itemid))
+				return table.get(i);
+		return null;
 	}
-	
-	/**
-	 * Returns an array of {@link QueryOperation}s used to filter the items from
-	 * the inventory associated with a denomination.
-	 * @return an array of {@link QueryOperation}s.
-	 */
-	public static QueryOperation<?>[] getQueryOperations() {
-		if(_qoutdateflag) {
-			queries = new QueryOperation<?>[table.size()];
-			for(
-					int i = 0; 
-					i < table.size(); 
-					queries[i] = QueryOperationTypes.ITEM_TYPE.of(Sponge.getRegistry().getType(ItemType.class, table.get(i).getItemId()).get()),
-					++i
-			);
-			_qoutdateflag = false;
-		}
-		return queries;
-	}
-	
+
 	/**
 	 * Returns the internal ID of the denomination associated with the given
 	 * name.
@@ -89,20 +73,42 @@ public final class Denominations {
 				return i;
 		return -1;
 	}
-	
+
 	/**
-	 * Returns the {@link Denomination} associated with the given Item ID.
-	 * @param itemid of the denomination.
-	 * @return the associated {@link Denomination} on success, null otherwise.
+	 * Returns a map containing the id associated with a denomination in the
+	 * internal table, and the denomination itself.
+	 * @return a {@link Map} of ids and denominations.
 	 */
-	public static Denomination getDenominationByItemId(String itemid) {
-		int i;
-		for(i = 0; i < table.size(); ++i)
-			if(table.get(i).getItemId().equals(itemid))
-				return table.get(i);
-		return null;
+	public static Map<Integer,Denomination> getDenominations() {
+		if(_mapoutdateflag) {
+			map = IntStream.range(0, table.size())
+					.boxed()
+					.collect(Collectors.toMap(i -> i, table::get))
+					;
+			_mapoutdateflag = false;
+		}
+		return map;
 	}
-	
+
+	/**
+	 * Returns an array of {@link QueryOperation}s used to filter the items from
+	 * the inventory associated with a denomination.
+	 * @return an array of {@link QueryOperation}s.
+	 */
+	public static QueryOperation<?>[] getQueryOperations() {
+		if(_qoutdateflag) {
+			queries = new QueryOperation<?>[table.size()];
+			for(
+					int i = 0;
+					i < table.size();
+					queries[i] = QueryOperationTypes.ITEM_TYPE.of(Sponge.getRegistry().getType(ItemType.class, table.get(i).getItemId()).get()),
+							++i
+					);
+			_qoutdateflag = false;
+		}
+		return queries;
+	}
+
 	/**
 	 * Adds the denominations to the internal register
 	 * @param d A {@link Denomination} instance.
@@ -112,7 +118,7 @@ public final class Denominations {
 		if(table.contains(d))
 			return false;
 		int i;
-		for(i = 0; i < table.size() && table.get(i).getValue() > d.getValue(); ++i);
+		for(i = 0; (i < table.size()) && (table.get(i).getValue() > d.getValue()); ++i);
 		table.add(i, d);
 		// Update flags
 		_qoutdateflag = true;
@@ -120,24 +126,18 @@ public final class Denominations {
 		_mapoutdateflag = true;
 		return true;
 	}
-	
+
 	/**
 	 * Registers a new denomination with the specified values.
 	 * @param id
-	 * @param value 
+	 * @param value
 	 * @param itemid used by the denomination.
 	 * @return true on success, false otherwise.
 	 */
 	public static boolean supply(String id, int value, String itemid) {
 		return Denominations.supply(new Denomination(id, value, itemid));
 	}
-	
-	/**
-	 * Returns the number of denominations currently registered.
-	 * @return the number of denominations present.
-	 */
-	public static int count() {
-		return table.size();
-	}
+
+	private Denominations() {}
 
 }
