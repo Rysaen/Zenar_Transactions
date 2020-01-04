@@ -1,6 +1,13 @@
 package io.github.rysaen.zenartransactions.denominations;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Stream;
+
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import org.spongepowered.api.text.Text;
 
 public class Denomination {
 
@@ -8,8 +15,10 @@ public class Denomination {
 	private int value;
 	private String itemid;
 	private String tostring;
+	private Text displayName;
+	private List<Text> lore;
 
-	public Denomination(@Nonnull String name, int value, @Nonnull String itemid) {
+	public Denomination(@Nonnull String name, int value, @Nonnull String itemid, @Nullable Text displayName, @Nullable Text[] loreLines) {
 		this.name = name;
 		this.value = value;
 		this.itemid = itemid;
@@ -22,6 +31,32 @@ public class Denomination {
 				.append(itemid)
 				.append(" }")
 				.toString();
+		this.displayName = displayName;
+		this.lore = null;
+		if(loreLines != null) {
+			this.lore = new LinkedList<>();
+			for(Text ll : loreLines) this.lore.add(ll);
+		}
+	}
+	
+	/**
+	 * Returns the display name, or null if not present.
+	 * @return a string representing the display name, or null if not present.
+	 */
+	public Text getDisplayName() {
+		return this.displayName;
+	}
+	
+	/**
+	 * Returns lore lines associated with the denomination. May return null if
+	 * no lore lines are defined.
+	 * @return A stream of strings representing the lore lines, or null if no
+	 * lore lines are found.
+	 */
+	public Stream<Text> getLore() {
+		if(lore != null)
+			return this.lore.stream();
+		return null;
 	}
 
 	@Override

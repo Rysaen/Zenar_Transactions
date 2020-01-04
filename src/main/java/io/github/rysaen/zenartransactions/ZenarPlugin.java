@@ -3,6 +3,8 @@ package io.github.rysaen.zenartransactions;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.config.ConfigDir;
@@ -12,6 +14,9 @@ import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextFormat;
+import org.spongepowered.api.text.serializer.TextSerializers;
 
 import com.google.inject.Inject;
 
@@ -71,9 +76,16 @@ public class ZenarPlugin {
 
 	private void loadDenominations(ConfigurationNode node) {
 		ZenarLogger.get().info("Loading denominations ...");
+		List<Text> entryLore = new LinkedList<>();
+		for(ConfigurationNode n : node.getNode("main", "denominations").getChildrenList()) {
+			ZenarLogger.get().debug("Denomination node: {}", n);
+			for(ConfigurationNode ll : n.getNode("lore").getChildrenList())
+				entryLore.add(Text.of(TextSerializers.FORMATTING_CODE.deserialize(ll.getString())));
+			Denominations.supply(n.getNode("name").getString(), n.getNode("value").getInt(), n.getNode("itemid").getString(), Text.of(TextSerializers.FORMATTING_CODE.deserialize(n.getNode("displayname").getString())), (Text[])entryLore.toArray(new Text[entryLore.size()]));
+			entryLore.clear();
+		}
 		node.getNode("main", "denominations").getChildrenList().forEach(x -> {
-			ZenarLogger.get().debug("Denomination node: {}", x);
-			Denominations.supply(x.getNode("name").getString(), x.getNode("value").getInt(), x.getNode("itemid").getString());
+			
 		});
 		ZenarLogger.get().info("Successfully loaded {} denominations.", Denominations.count());
 		return;
@@ -87,6 +99,7 @@ public class ZenarPlugin {
 		Sponge.getCommandManager().register(this, WithdrawCommand.build(), "ritira");
 		Sponge.getCommandManager().register(this, ZenarCommand.build(), "zenar");
 		ZenarLogger.get().info("Initialization phase ended.");
+		
 	}
 
 	@Listener

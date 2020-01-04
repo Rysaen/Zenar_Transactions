@@ -7,10 +7,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.query.QueryOperation;
 import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
+import org.spongepowered.api.text.Text;
 
 public final class Denominations {
 
@@ -132,12 +134,13 @@ public final class Denominations {
 	 * @param id
 	 * @param value
 	 * @param itemid used by the denomination.
+	 * @param displayName
+	 * @param lore
 	 * @return true on success, false otherwise.
 	 */
-	public static boolean supply(String id, int value, String itemid) {
-		return Denominations.supply(new Denomination(id, value, itemid));
+	public static boolean supply(String id, int value, String itemid, Text displayName, Text ...lore) {
+		return Denominations.supply(new Denomination(id, value, itemid, displayName, lore));
 	}
 
 	private Denominations() {}
-
 }

@@ -6,8 +6,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.EventContext;
@@ -30,7 +32,7 @@ import io.github.rysaen.zenartransactions.denominations.Denomination;
 import io.github.rysaen.zenartransactions.denominations.Denominations;
 
 public class TransactionUtil {
-	private static final Integer MAX_STACK_SIZE = 64;
+//	private static final Integer MAX_STACK_SIZE = 64;
 	private static final EventContext transactionsContext = EventContext.builder()
 			.add(EventContextKeys.PLUGIN, Sponge.getPluginManager().getPlugin(ZenarPlugin.ID).get())
 			.build();
@@ -144,13 +146,29 @@ public class TransactionUtil {
 		ItemStack is;
 		boolean _interrupted = false;
 		Inventory playerInventory = player.getInventory().query(QueryOperationTypes.INVENTORY_TYPE.of(MainPlayerInventory.class));
+		Optional<ItemType> it;
+		Denomination den;
 		for(int i = 0; i < d.length; ++i)
 		{
-			is = ItemStack.builder().itemType(Sponge.getRegistry().getType(ItemType.class, Denominations.getDenominations().get(i).getItemId()).get()).quantity(MAX_STACK_SIZE).build();
-			for(int j = 0; j < (d[i]/MAX_STACK_SIZE); ++j)
+			den = Denominations.getDenominations().get(i);
+			it = Sponge.getRegistry().getType(ItemType.class, den.getItemId());
+			
+			// Se il taglio non è presente, viene skippato e sulla console viene
+			// stampato un messaggio d'errore.
+			if(!it.isPresent()) {
+				ZenarLogger.get().error("L'itemid {} utilizzato nella denominations {}, non è presente nel registro!", Denominations.getDenominations().get(i).getItemId(), Denominations.getDenominations().get(i).getItemId());
+				continue;
+			}
+			
+			// Building Stack
+			is = ItemStack.builder().itemType(it.get()).quantity(it.get().getMaxStackQuantity()).build();
+			if(den.getLore() != null) is.offer(Keys.ITEM_LORE, den.getLore().collect(Collectors.toList()));
+			if(den.getDisplayName() != null) is.offer(Keys.DISPLAY_NAME, den.getDisplayName());
+			
+			for(int j = 0; j < (d[i]/it.get().getMaxStackQuantity()); ++j)
 				if(playerInventory.canFit(is)) {
 					playerInventory.offer(is.copy());
-					amountTransferred = amountTransferred.add(BigDecimal.valueOf(Denominations.getDenominations().get(i).getValue()*is.getQuantity()));
+					amountTransferred = amountTransferred.add(BigDecimal.valueOf(den.getValue()*is.getQuantity()));
 				}
 				else {
 					_interrupted = true;
@@ -158,10 +176,10 @@ public class TransactionUtil {
 				}
 			if(_interrupted)
 				break;
-			is.setQuantity(d[i]%MAX_STACK_SIZE);
+			is.setQuantity(d[i]%it.get().getMaxStackQuantity());
 			if(playerInventory.canFit(is)) {
 				playerInventory.offer(is.copy());
-				amountTransferred = amountTransferred.add(BigDecimal.valueOf(Denominations.getDenominations().get(i).getValue()*is.getQuantity()));
+				amountTransferred = amountTransferred.add(BigDecimal.valueOf(den.getValue()*is.getQuantity()));
 			} else {
 				_interrupted = true;
 				break;
