@@ -15,7 +15,6 @@ import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.format.TextFormat;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 import com.google.inject.Inject;
