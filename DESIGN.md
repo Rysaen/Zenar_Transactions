@@ -40,9 +40,11 @@ il file di configurazioni associato al plugin (config/zenar.conf).
 
 ```
 {
-    name="DENOMINATION",
-    value=VALUE,
+    name="DENOMINATION"
+    value=VALUE
     itemid="PLUGINID:ITEMID"
+    displayname="DISPLAY_NAME"
+    lore=["LORE_RIGA_1","LORE_RIGA_2","LORE_RIGA_3"]
 }
 ```
 
@@ -53,7 +55,11 @@ Ogni entry è caratterizzata dalle seguenti proprietà:
 * `value`, il valore effettivo del taglio;
 * `itemid`, l'ID dell'item associato al taglio. Non esistono vincoli sugli ID
   possibili da utilizzare. Per convenzione si utilizza il formato
-  "pluginid:itemid".
+  "pluginid:itemid";
+* `displayname`, il nome che verrà mostrato sull'item. Possono essere utilizzate
+  formattazioni ampersand.
+* `lore`, rappresentano le linee di lore. Possono essere utilizzate
+  formattazioni ampersand.
 
 L'inserimento di un nuovo taglio, o la rimozione di uno già esistente, così come
 la modifica del valore di un taglio, o dell'oggetto associato si riduce alla
