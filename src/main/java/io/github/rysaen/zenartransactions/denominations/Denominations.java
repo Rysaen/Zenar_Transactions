@@ -85,7 +85,7 @@ public final class Denominations {
 			map = IntStream.range(0, table.size())
 					.boxed()
 					.collect(Collectors.toMap(i -> i, table::get))
-					;
+			;
 			_mapoutdateflag = false;
 		}
 		return map;

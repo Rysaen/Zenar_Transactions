@@ -9,7 +9,7 @@ plugins {
 compileJava.options.encoding = "UTF-8"
 
 group = 'io.github.rysaen'
-version = '20.1.4'
+version = '20.1.7'
 description = 'Zenar Transactions Plugin'
 
 sponge {

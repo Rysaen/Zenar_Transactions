@@ -10,6 +10,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
+import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
@@ -23,6 +24,7 @@ import io.github.rysaen.zenartransactions.commands.DepositCommand;
 import io.github.rysaen.zenartransactions.commands.WithdrawCommand;
 import io.github.rysaen.zenartransactions.commands.ZenarCommand;
 import io.github.rysaen.zenartransactions.denominations.Denominations;
+import io.github.rysaen.zenartransactions.util.ZenarRecipes;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
@@ -44,7 +46,7 @@ public class ZenarPlugin {
 	public final static String ID = "zenartransactions";
 	public final static String NAME = "Zenar Transactions";
 	public final static String DESCRIPTION = "Zenar Transactions Plugin";
-	public final static String VERSION = "19.12";
+	public final static String VERSION = "20.1.7";
 	public final static String SPONGE_API_VERSION = "7.1.0";
 
 	@Inject PluginContainer plugin;
@@ -98,7 +100,12 @@ public class ZenarPlugin {
 		Sponge.getCommandManager().register(this, WithdrawCommand.build(), "ritira");
 		Sponge.getCommandManager().register(this, ZenarCommand.build(), "zenar");
 		ZenarLogger.get().info("Initialization phase ended.");
-		
+	}
+	
+	@Listener
+	public void onPostInit(GamePostInitializationEvent evt) {
+		// Processing recipes
+		ZenarRecipes.processRecipes(plugin).forEach(Sponge.getRegistry().getCraftingRecipeRegistry()::register);
 	}
 
 	@Listener

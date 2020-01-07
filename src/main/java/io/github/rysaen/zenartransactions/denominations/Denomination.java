@@ -2,11 +2,17 @@ package io.github.rysaen.zenartransactions.denominations;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.item.ItemType;
+import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.ItemStackSnapshot;
 import org.spongepowered.api.text.Text;
 
 public class Denomination {
@@ -17,6 +23,7 @@ public class Denomination {
 	private String tostring;
 	private Text displayName;
 	private List<Text> lore;
+	private ItemStackSnapshot snapshot = null;
 
 	public Denomination(@Nonnull String name, int value, @Nonnull String itemid, @Nullable Text displayName, @Nullable Text[] loreLines) {
 		this.name = name;
@@ -83,5 +90,21 @@ public class Denomination {
 	@Override
 	public String toString() {
 		return tostring;
+	}
+
+	public Optional<ItemType> getItemType() {
+		return Sponge.getRegistry().getType(ItemType.class, this.getItemId());
+	}
+	
+	public ItemStackSnapshot getItemStackSnapshot() {
+		if(snapshot == null)
+			snapshot = ItemStack.builder()
+				.itemType(this.getItemType().get())
+				.add(Keys.DISPLAY_NAME, this.getDisplayName())
+				.add(Keys.ITEM_LORE, lore)
+				.quantity(1)
+				.build()
+				.createSnapshot();
+		return snapshot;
 	}
 }
