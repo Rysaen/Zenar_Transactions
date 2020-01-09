@@ -42,7 +42,7 @@ public final class Denominations {
 			definitions = table.stream()
 					.map(x -> { return x.getName(); })
 					.collect(Collectors.toList())
-					;
+			;
 			_defoutdateflag = false;
 		}
 		return definitions;
@@ -103,8 +103,8 @@ public final class Denominations {
 					int i = 0;
 					i < table.size();
 					queries[i] = QueryOperationTypes.ITEM_TYPE.of(Sponge.getRegistry().getType(ItemType.class, table.get(i).getItemId()).get()),
-							++i
-					);
+					++i
+			);
 			_qoutdateflag = false;
 		}
 		return queries;

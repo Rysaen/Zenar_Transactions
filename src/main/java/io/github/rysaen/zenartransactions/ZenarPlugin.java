@@ -99,13 +99,17 @@ public class ZenarPlugin {
 		Sponge.getCommandManager().register(this, DepositCommand.build(), "deposita");
 		Sponge.getCommandManager().register(this, WithdrawCommand.build(), "ritira");
 		Sponge.getCommandManager().register(this, ZenarCommand.build(), "zenar");
+		
 		ZenarLogger.get().info("Initialization phase ended.");
 	}
 	
 	@Listener
 	public void onPostInit(GamePostInitializationEvent evt) {
+		ZenarLogger.get().info("Post-Initialization phase started.");
 		// Processing recipes
 		ZenarRecipes.processRecipes(plugin).forEach(Sponge.getRegistry().getCraftingRecipeRegistry()::register);
+		
+		ZenarLogger.get().info("Post-Initialization phase ended.");
 	}
 
 	@Listener
@@ -115,6 +119,7 @@ public class ZenarPlugin {
 		ConfigurationNode root = loadConfigurations();
 		// Loading denominations
 		loadDenominations(root);
+		
 		ZenarLogger.get().info("Pre-Initialization phase ended.");
 	}
 }
