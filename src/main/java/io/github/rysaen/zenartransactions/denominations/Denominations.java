@@ -140,6 +140,16 @@ public final class Denominations {
 	public static boolean supply(String id, int value, String itemid, Text displayName, Text ...lore) {
 		return Denominations.supply(new Denomination(id, value, itemid, displayName, lore));
 	}
-
+	
+	/**
+	 * Resets the current denominations. Used for GameReloadEvent mainly.
+	 */
+	public static void reset() {
+		table.clear();
+		_qoutdateflag = true;
+		_defoutdateflag = true;
+		_mapoutdateflag = true;
+	}
+	
 	private Denominations() {}
 }

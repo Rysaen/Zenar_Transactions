@@ -9,6 +9,7 @@ import java.util.List;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
@@ -116,5 +117,12 @@ public class ZenarPlugin {
 		// Loading denominations
 		loadDenominations(root);
 		ZenarLogger.get().info("Pre-Initialization phase ended.");
+	}
+	
+	@Listener
+	public void onReload(GameReloadEvent evt) {
+		Denominations.reset();
+		ConfigurationNode root = loadConfigurations();
+		loadDenominations(root);
 	}
 }
