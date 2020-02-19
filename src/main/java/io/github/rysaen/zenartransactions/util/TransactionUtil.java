@@ -137,8 +137,8 @@ public class TransactionUtil {
 
 		amountToTransfer = totalTransactionValue(d);
 		TransactionResult res = acc.withdraw(es.getDefaultCurrency(), amountToTransfer, Cause.of(transactionsContext, Sponge.getPluginManager().getPlugin(ZenarPlugin.ID)));
-		if(res.getResult() != ResultType.SUCCESS) {
-			player.sendMessage(Text.of(TextColors.RED, "Non è stato possibile completare la transazione. Se l'errore persiste, contattare un admin."));
+		if (res.getResult() != ResultType.SUCCESS) {
+			player.sendMessage(Text.of(TextColors.RED, "Non è stato possibile completare la transazione."));
 			return false;
 		}
 
@@ -148,14 +148,14 @@ public class TransactionUtil {
 		Inventory playerInventory = player.getInventory().query(QueryOperationTypes.INVENTORY_TYPE.of(MainPlayerInventory.class));
 		Optional<ItemType> it;
 		Denomination den;
-		for(int i = 0; i < d.length; ++i)
+		for (int i = 0; i < d.length; ++i)
 		{
 			den = Denominations.getDenominations().get(i);
 			it = Sponge.getRegistry().getType(ItemType.class, den.getItemId());
 			
 			// Se il taglio non è presente, viene skippato e sulla console viene
 			// stampato un messaggio d'errore.
-			if(!it.isPresent()) {
+			if (!it.isPresent()) {
 				ZenarLogger.get().error("L'itemid {} utilizzato nella denominations {}, non è presente nel registro!", Denominations.getDenominations().get(i).getItemId(), Denominations.getDenominations().get(i).getItemId());
 				continue;
 			}
@@ -191,12 +191,13 @@ public class TransactionUtil {
 			player.sendMessage(Text.of(TextColors.GRAY, "Non hai abbastanza spazio nell'inventario per prelevare l'intera somma specificata. Ti sono stati consegnati ")
 					.concat(Text.of(TextColors.GOLD, amountTransferred))
 					.concat(Text.of(TextColors.GRAY, " zenar (anziché " + amountToTransfer + ")")));
-		} else
+		} else {
 			player.sendMessage(Text.of("Hai ritirato ")
 					.concat(Text.of(TextColors.GREEN, amountTransferred))
 					.concat(Text.of(" zenar dal tuo conto virtuale (che ora ammonta a "))
 					.concat(Text.of(TextColors.GOLD, acc.getBalance(es.getDefaultCurrency()))
 							.concat(Text.of(" zenar)"))));
+		}
 		ZenarLogger.get().info("Withdraw > {} wihdrawn {} zenar from his virtual account.", player.getName(), amountTransferred);
 		return true;
 	}
