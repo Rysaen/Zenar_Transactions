@@ -14,6 +14,7 @@ import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GameInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePostInitializationEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
+import org.spongepowered.api.event.game.state.GameStartedServerEvent;
 import org.spongepowered.api.item.recipe.crafting.CraftingRecipe;
 import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
@@ -27,7 +28,7 @@ import io.github.rysaen.zenartransactions.commands.DepositCommand;
 import io.github.rysaen.zenartransactions.commands.WithdrawCommand;
 import io.github.rysaen.zenartransactions.commands.ZenarCommand;
 import io.github.rysaen.zenartransactions.denominations.Denominations;
-import io.github.rysaen.zenartransactions.events.ZenarEvents;
+import io.github.rysaen.zenartransactions.events.ZenarEventsHandler;
 import io.github.rysaen.zenartransactions.util.ZenarRecipes;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -104,14 +105,8 @@ public class ZenarPlugin {
 		Sponge.getCommandManager().register(this, WithdrawCommand.build(), "ritira");
 		Sponge.getCommandManager().register(this, ZenarCommand.build(), "zenar");
 		// Register listeners
-		Sponge.getEventManager().registerListeners(plugin, new ZenarEvents());
+		Sponge.getEventManager().registerListeners(this.plugin, new ZenarEventsHandler());
 		ZenarLogger.get().info("Initialization phase ended.");
-	}
-	
-	@Listener
-	public void onPostInit(GamePostInitializationEvent evt) {
-		// Processing recipes
-//		ZenarRecipes.processRecipes(plugin).forEach(Sponge.getRegistry().getCraftingRecipeRegistry()::register);
 	}
 	
 	@Listener
