@@ -11,8 +11,8 @@ import org.spongepowered.api.item.recipe.crafting.ShapedCraftingRecipe;
 import org.spongepowered.api.plugin.PluginContainer;
 
 import io.github.rysaen.zenartransactions.ZenarLogger;
-import io.github.rysaen.zenartransactions.denominations.Denomination;
-import io.github.rysaen.zenartransactions.denominations.Denominations;
+import io.github.rysaen.zenartransactions.denomination.Denomination;
+import io.github.rysaen.zenartransactions.denomination.Denominations;
 
 public class ZenarRecipes {
 	public static List<CraftingRecipe> processRecipes(PluginContainer plugin) {

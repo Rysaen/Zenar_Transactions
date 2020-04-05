@@ -1,23 +1,4 @@
-# Exclude all# Ignore Gradle project-specific cache directory
-.gradle
-
-# Ignore Gradle build output directory
-build
-
-# Eclipse Files
-.classpath
-.project
-.settings/
-
-bin/
-
-# Emacs generated
-*~
-.#*
-*#
-
-# Tests
-src/test/
+# Exclude all.gradle
 /*
 
 # Include git important files

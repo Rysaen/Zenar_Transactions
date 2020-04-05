@@ -10,7 +10,7 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
-import io.github.rysaen.zenartransactions.denominations.Denominations;
+import io.github.rysaen.zenartransactions.denomination.Denominations;
 import io.github.rysaen.zenartransactions.util.TransactionUtil;
 
 

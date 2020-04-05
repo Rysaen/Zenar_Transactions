@@ -1,4 +1,4 @@
-package io.github.rysaen.zenartransactions.denominations;
+package io.github.rysaen.zenartransactions.denomination;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -14,6 +14,7 @@ import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.ItemStackSnapshot;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.serializer.TextSerializers;
 
 public class Denomination {
 
@@ -25,7 +26,7 @@ public class Denomination {
 	private List<Text> lore;
 	private ItemStackSnapshot snapshot = null;
 
-	public Denomination(@Nonnull String name, int value, @Nonnull String itemid, @Nullable Text displayName, @Nullable Text[] loreLines) {
+	public Denomination(@Nonnull String name, int value, @Nonnull String itemid, @Nullable String displayName, @Nullable List<String> loreLines) {
 		this.name = name;
 		this.value = value;
 		this.itemid = itemid;
@@ -38,11 +39,13 @@ public class Denomination {
 				.append(itemid)
 				.append(" }")
 				.toString();
-		this.displayName = displayName;
+		this.displayName = Text.of(TextSerializers.FORMATTING_CODE.deserialize(displayName));
 		this.lore = null;
-		if(loreLines != null) {
+		if (loreLines != null) {
 			this.lore = new LinkedList<>();
-			for(Text ll : loreLines) this.lore.add(ll);
+			for (String ll : loreLines) {
+				this.lore.add(Text.of(TextSerializers.FORMATTING_CODE.deserialize(ll)));
+			}
 		}
 	}
 	

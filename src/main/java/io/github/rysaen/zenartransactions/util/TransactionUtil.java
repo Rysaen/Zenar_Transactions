@@ -28,8 +28,8 @@ import org.spongepowered.api.text.format.TextColors;
 
 import io.github.rysaen.zenartransactions.ZenarLogger;
 import io.github.rysaen.zenartransactions.ZenarPlugin;
-import io.github.rysaen.zenartransactions.denominations.Denomination;
-import io.github.rysaen.zenartransactions.denominations.Denominations;
+import io.github.rysaen.zenartransactions.denomination.Denomination;
+import io.github.rysaen.zenartransactions.denomination.Denominations;
 
 public class TransactionUtil {
 //	private static final Integer MAX_STACK_SIZE = 64;

@@ -1,10 +1,10 @@
-package io.github.rysaen.zenartransactions.events;
+package io.github.rysaen.zenartransactions.listeners;
 
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.item.inventory.ChangeInventoryEvent;
 import org.spongepowered.api.item.inventory.transaction.SlotTransaction;
 
-import io.github.rysaen.zenartransactions.denominations.Denominations;
+import io.github.rysaen.zenartransactions.denomination.Denominations;
 
 public class ZenarEventsHandler {
 	private static final String EnderChestString = "Ender Chest";

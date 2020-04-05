@@ -1,4 +1,4 @@
-package io.github.rysaen.zenartransactions.denominations;
+package io.github.rysaen.zenartransactions.denomination;
 
 import java.util.ArrayList;
 import java.util.Collection;
