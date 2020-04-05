@@ -1,4 +1,4 @@
-# Ignore Gradle project-specific cache directory
+# Exclude all# Ignore Gradle project-specific cache directory
 .gradle
 
 # Ignore Gradle build output directory
@@ -18,3 +18,21 @@ bin/
 
 # Tests
 src/test/
+/*
+
+# Include git important files
+!.gitignore
+!.gitattributes
+
+# Include gradle build file
+!gradle/
+!gradlew
+!gradlew.bat
+!build.gradle
+
+# Include source
+!src/
+
+# Include mds
+!DESIGN.md
+!README.md
